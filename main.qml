@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtWebSockets 1.0
+
 Window {
     id: window
     visible: true
@@ -144,7 +145,7 @@ Window {
         x: 0
         Text {
             id: statusMessage
-            text: qsTr("Showing 6 out of 15 orders")
+            text: qsTr("Loading...")
             anchors.centerIn: parent
             color: "#FFFFFF"
         }
@@ -417,22 +418,23 @@ Window {
                                                    height: ' + recContent.height/8 + ';
                                                    Rectangle{
                                                        width: parent.width
-                                                       height: 80;
+                                                       height: parent.height * 0.75;
                                                        y: parent.y;
                                                        Image {
-                                                           source: "/img/male.png"
-                                                           anchors.centerIn: parent
-                                                           width: 32
-                                                           height: 32
+                                                           source: "/img/male.png";
+                                                           anchors.centerIn: parent;
+                                                           fillMode: Image.PreserveAspectCrop;
+                                                           width: 32;
+                                                           height: 32;
                                                               }
                                                        }
                                                    Rectangle{
                                                        width: parent.width
                                                        height: parent.height * 0.25
-                                                       y: parent.y + 60;
+                                                       y: parent.y + parent.height * 0.65;
                                                        Text {
                                                            text: qsTr("' + order["user"][z]["name"] + '")
-                                                           anchors.centerIn: parent
+                                                           anchors.centerIn: parent;
                                                            }
                                                        }
                                                    }
@@ -495,8 +497,8 @@ Window {
                                                                 Image {
                                                                     source: "/img/table.png"
                                                                     fillMode: Image.PreserveAspectCrop
-                                                                    width: parent.width - 30;
-                                                                    height: parent.height - 55;
+                                                                    width: parent.width - 5;
+                                                                    height: parent.height - 15;
                                                                     anchors.centerIn: parent;
                                                                     Text {
                                                                         text: qsTr("' + order["table"]["name"] + '");
