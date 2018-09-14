@@ -9,6 +9,7 @@ Window {
     height: Screen.desktopAvailableHeight
     title: qsTr("KITCHEN")
     flags:Qt.FramelessWindowHint    //Hide TileBar
+
     property var stringY: "0"
     property var dataArray: []
     //Title
@@ -25,7 +26,8 @@ Window {
             color: "#F44236"
             Image {
                 id: imgLogo
-                source: "/img/food.png"
+                //source: "/images/food.png"
+                source: "http://www.eatlogos.com/food_and_drinks/png/vector_food_orange_logo.png"
                 anchors.centerIn: parent
                 width: 40
                 height: 40
@@ -47,6 +49,7 @@ Window {
             }
         }
     }
+
     //Table HeaderRow
     Row{
         id: headRow
@@ -54,9 +57,10 @@ Window {
         x: recLogo.x
         y: recLogo.y + recLogo.height
         width: parent.width
+
         Rectangle{
             id: colID
-            width: parent.width *0.1
+            width: 80
             height: 25
             color: "#DBDBDB"
             Text {
@@ -68,7 +72,7 @@ Window {
         }
         Rectangle{
             id: colPrioritize
-            width: parent.width *0.1
+            width: 180
             height: 25
             color: "#DBDBDB"
             Text {
@@ -92,7 +96,7 @@ Window {
         }
         Rectangle{
             id: colQty
-            width: parent.width *0.05
+            width: 120
             height: 25
             color: "#DBDBDB"
             Text {
@@ -104,7 +108,7 @@ Window {
         }
         Rectangle{
             id: colTable
-            width: parent.width *0.05
+            width: 90
             height: 25
             color: "#DBDBDB"
             Text {
@@ -116,7 +120,7 @@ Window {
         }
         Rectangle{
             id: colChef
-            width: parent.width *0.4
+            width: 400
             height: 25
             color: "#DBDBDB"
             Text {
@@ -127,6 +131,7 @@ Window {
             }
         }
     }
+
     //Content Row
     Rectangle{
         id: recContent
@@ -145,11 +150,12 @@ Window {
         x: 0
         Text {
             id: statusMessage
-            text: qsTr("Loading...")
+            text: qsTr("Showing 6 out of 15 orders")
             anchors.centerIn: parent
             color: "#FFFFFF"
         }
     }
+
     WebSocket {
            id: socket
            //url: "ws://13.67.35.142:8686/categories"
@@ -158,6 +164,8 @@ Window {
                //console.log(message)
                //_createTime
                var jsonObject = JSON.parse(message)
+
+
                //kiểm tra xem có thêm dữ liệu hay không
                var hasOrder=0;
                // when server update
@@ -181,11 +189,13 @@ Window {
                                        dataArray[deleteArray]["priority"] = false;
                                        dataArray[deleteArray]["_createTime"] = 0;
                                    }
+
                                 }
                                 sortArray(dataArray);
                                 //duyetMang(dataArray);
                                 console.log("du lieu xoa la" + dataArray.pop()["food"]["name"]);
                                 console.log("xoa data khoi array");
+
                             }else if(dataArray[j]["_id"] === jsonObject["order"][i]["_id"] && jsonObject["order"][i]["status"] === "Accept"){
                                 if(dataArray[j]["priority"] !== jsonObject["order"][i]["priority"] )
                                 {
@@ -198,9 +208,11 @@ Window {
                                 {
                                     hasOrder++;
                                 }
+
                             }else if(dataArray[j]["_id"] !== jsonObject["order"][i]["_id"] && jsonObject["order"][i]["status"] !== "Accept"){
                                 hasOrder++;
                             }
+
                         }
                         // thêm dữ liệu ( đây là trường hợp server thêm mới 1 ID và có status là accept
                         if(hasOrder == 0)
@@ -210,11 +222,13 @@ Window {
                             dataArray[dataArray.length] = jsonObject["order"][i];
                             console.log("value uu tien la" + dataArray[dataArray.length -1]["priority"]);
                             //console.log("them data vao dataArray : " + console.log(dataArray[dataArray.length -1]["_id"]));
+
                             // sort lại dataArray
                             sortArray(dataArray);
                         }
                         hasOrder = 0;
                     }
+
                     //remove all recContent
                     for(var i=0 ;i<recContent.children.length;i++)
                     {
@@ -223,6 +237,7 @@ Window {
                     // add new data to recContent
                     stringY = 0;
                     console.log("do dai cua dataArray sau khi update la " +dataArray.length);
+
                     //sort dataArray
                     sortArray(dataArray);
                     checkOrder(dataArray);
@@ -232,7 +247,8 @@ Window {
                     var order = dataArray[i];
                         //Xử lý hiển thị ảnh ưu tiên
                         var imgCheck = "";
-                        if(order["priority"] !== false) imgCheck = "/img/check-mark.png"
+                        if(order["priority"] !== false) imgCheck = "/images/check-mark.png"
+
                         var objectNote = ""
                         var xNote = colOrderName.x
                         //Xử lý hiển thị các note
@@ -270,7 +286,7 @@ Window {
                                                          height: 80;
                                                          y: parent.y;
                                                          Image {
-                                                             source: "/img/male.png"
+                                                             source: "/images/male.png"
                                                              anchors.centerIn: parent
                                                              fillMode: Image.PreserveAspectCrop
                                                              width: 32
@@ -291,6 +307,7 @@ Window {
                                 xUser += colChef.width/order["user"].length;
                             }
                         }
+
                         var objectString = 'import QtQuick 2.9;Rectangle{
                                                      objectName: "' + order["_id"] +'"
                                                      color: "white";
@@ -302,7 +319,7 @@ Window {
                                                                  width: ' + colID.width + ';
                                                                  height: parent.height;
                                                                  Text {
-                                                                     text: qsTr("#' + order["code"]  + '");
+                                                                     text: qsTr("' + (i+1).toString() + '");
                                                                      anchors.centerIn: parent;
                                                                      }
                                                                  }
@@ -344,7 +361,7 @@ Window {
                                                                  width: ' + colTable.width + ';
                                                                  height: parent.height;
                                                                  Image {
-                                                                     source: "/img/table.png"
+                                                                     source: "/images/table.png"
                                                                      fillMode: Image.PreserveAspectCrop
                                                                      width: parent.width - 30;
                                                                      height: parent.height - 60;
@@ -356,16 +373,21 @@ Window {
                                                                          }
                                                                      }
                                                                  }
-                                                    Rectangle {
-                                                                x: ' + colChef.x + ';
-                                                                width: ' + colChef.width + ';
-                                                                height: parent.height;
-                                                              }'
+                                                     Rectangle {
+                                                                 x: ' + colChef.x + ';
+                                                                 width: ' + colChef.width + ';
+                                                                 height: parent.height;
+                                                                 Text {
+                                                                     text: qsTr("' + order["user"] + '");
+                                                                     anchors.centerIn: parent;
+                                                                     }
+                                                                 }'
                                                          + objectUser +'
                                                          }\n'
                         var newObject = Qt.createQmlObject(objectString.toString(),
                                                      recContent,
                                                           order["_id"]);
+
                         stringY = convertToInt(stringY) + recContent.height/8 + 5
                 }
                }
@@ -379,12 +401,17 @@ Window {
                     }
                     checkOrder(jsonObject["order"]);
                     console.log("do dai cua dataArray sau khi get la " +dataArray.length);
+
                     sortArray(dataArray);
+
+
                    for (var i=0; i<dataArray.length; i++){
                    var order = dataArray[i]
+
                        //Xử lý hiển thị ảnh ưu tiên
                        var imgCheck = "";
-                       if(order["priority"] !== false) imgCheck = "/img/check.png"
+                       if(order["priority"] !== false) imgCheck = "/images/check-mark.png"
+
                        var objectNote = ""
                        var xNote = colOrderName.x
                        //Xử lý hiển thị các note
@@ -411,49 +438,52 @@ Window {
                        var yUser = stringY
                        //Xử lý hiển thị các user
                        for(var z=0; z<order["user"].length; z++){
-                          if(order["user"][z]["name"] !== null){
-                              objectUser += 'Rectangle{
-                                                   x: ' + xUser + ';
-                                                   width: ' + colChef.width/order["user"].length + ' - 10;
-                                                   height: ' + recContent.height/8 + ' - 7;
-                                                   Rectangle{
-                                                       width: parent.width
-                                                       height: parent.height * 0.75;
-                                                       y: parent.y;
-                                                       Image {
-                                                           source: "/img/male.png";
-                                                           anchors.centerIn: parent;
-                                                           fillMode: Image.PreserveAspectCrop;
-                                                           width: 32;
-                                                           height: 32;
-                                                              }
-                                                       }
-                                                   Rectangle{
-                                                       width: parent.width
-                                                       height: parent.height * 0.25
-                                                       y: parent.y + parent.height * 0.65;
-                                                       Text {
-                                                           text: qsTr("' + order["user"][z]["name"] + '")
-                                                           anchors.centerIn: parent;
-                                                           }
-                                                       }
-                                                   }
-                                                   '
-                              xUser += colChef.width/order["user"].length;
-                          }
-                      }
+                           console.log(order["user"][z]["name"]);
+                           if(order["user"][z]["name"] !== null){
+                               objectUser += 'Rectangle{
+                                                    x: ' + xUser + ';
+                                                    //y: parent.y;
+                                                    width: ' + colChef.width/order["user"].length + ' - 10;
+                                                    height: parent.height
+                                                    Rectangle{
+                                                        width: parent.width
+                                                        height: 80;
+                                                        y: parent.y;
+                                                        Image {
+                                                            source: "/images/male.png"
+                                                            anchors.centerIn: parent
+                                                            fillMode: Image.PreserveAspectCrop
+                                                            width: 32
+                                                            height: 32
+                                                               }
+                                                        }
+                                                    Rectangle{
+                                                        width: parent.width
+                                                        height: parent.height * 0.25
+                                                        y: parent.y + 80;
+                                                        Text {
+                                                            text: qsTr("' + order["user"][z]["name"] + '")
+                                                            anchors.centerIn: parent
+                                                            }
+                                                        }
+                                                    }
+                                                    '
+                               xUser += colChef.width/order["user"].length;
+                           }
+                       }
+
                        var objectString = 'import QtQuick 2.9;Rectangle{
                                                     objectName: "' + order["_id"] +'"
                                                     color: "white";
                                                     width: parent.width;
-                                                    height: parent.height/8 - 7;
+                                                    height: parent.height/8;
                                                     y: ' + stringY.toString() + ';
                                                     Rectangle {
                                                                 x: ' + colID.x + '
                                                                 width: ' + colID.width + ';
                                                                 height: parent.height;
                                                                 Text {
-                                                                    text: qsTr("#' + order["code"]  + '");
+                                                                    text: qsTr("' + (i+1).toString() + '");
                                                                     anchors.centerIn: parent;
                                                                     }
                                                                 }
@@ -495,16 +525,15 @@ Window {
                                                                 width: ' + colTable.width + ';
                                                                 height: parent.height;
                                                                 Image {
-                                                                    source: "/img/table.png"
+                                                                    source: "/images/table.png"
                                                                     fillMode: Image.PreserveAspectCrop
-                                                                    width: parent.width * 0.95;
-                                                                    height: parent.height * 0.9;
+                                                                    width: parent.width - 30;
+                                                                    height: parent.height - 60;
                                                                     anchors.centerIn: parent;
                                                                     Text {
                                                                         text: qsTr("' + order["table"]["name"] + '");
                                                                         color: "#FFFFFF"
-                                                                        anchors.centerIn: parent;
-                                                                        font.pointSize: 14;
+                                                                        anchors.centerIn: parent
                                                                         }
                                                                     }
                                                                 }
@@ -512,13 +541,18 @@ Window {
                                                                 x: ' + colChef.x + ';
                                                                 width: ' + colChef.width + ';
                                                                 height: parent.height;
-                                                              }'
+                                                                Text {
+                                                                    text: qsTr("' + order["user"] + '");
+                                                                    anchors.centerIn: parent;
+                                                                    }
+                                                                }'
                                                         + objectUser +'
                                                         }\n'
                        var newObject = Qt.createQmlObject(objectString.toString(),
                                                     recContent,
                                                          order["_id"]);
-                       stringY = convertToInt(stringY) + recContent.height/8 + 1
+
+                       stringY = convertToInt(stringY) + recContent.height/8 + 5
                        //console.log(objectString)
                        }
                    }
@@ -537,13 +571,16 @@ Window {
         text: "0"
         visible: false
     }
+
     //Vùng màn hình nhấn vào sẽ đóng cửa sổ hiện thị
     MouseArea {
             anchors.fill: parent
             onClicked: {
                 Qt.quit();
             }
+
         }
+
     function convertToInt(string)
     {
            var stringValue = parseInt(string);
