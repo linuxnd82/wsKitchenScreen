@@ -415,7 +415,7 @@ Window {
                               objectUser += 'Rectangle{
                                                    x: ' + xUser + ';
                                                    width: ' + colChef.width/order["user"].length + ' - 10;
-                                                   height: ' + recContent.height/8 + ';
+                                                   height: ' + recContent.height/8 + ' - 7;
                                                    Rectangle{
                                                        width: parent.width
                                                        height: parent.height * 0.75;
@@ -446,7 +446,7 @@ Window {
                                                     objectName: "' + order["_id"] +'"
                                                     color: "white";
                                                     width: parent.width;
-                                                    height: parent.height/8;
+                                                    height: parent.height/8 - 7;
                                                     y: ' + stringY.toString() + ';
                                                     Rectangle {
                                                                 x: ' + colID.x + '
@@ -497,13 +497,14 @@ Window {
                                                                 Image {
                                                                     source: "/img/table.png"
                                                                     fillMode: Image.PreserveAspectCrop
-                                                                    width: parent.width - 5;
-                                                                    height: parent.height - 15;
+                                                                    width: parent.width * 0.95;
+                                                                    height: parent.height * 0.9;
                                                                     anchors.centerIn: parent;
                                                                     Text {
                                                                         text: qsTr("' + order["table"]["name"] + '");
                                                                         color: "#FFFFFF"
-                                                                        anchors.centerIn: parent
+                                                                        anchors.centerIn: parent;
+                                                                        font.pointSize: 14;
                                                                         }
                                                                     }
                                                                 }
@@ -517,7 +518,7 @@ Window {
                        var newObject = Qt.createQmlObject(objectString.toString(),
                                                     recContent,
                                                          order["_id"]);
-                       stringY = convertToInt(stringY) + recContent.height/8+ 5
+                       stringY = convertToInt(stringY) + recContent.height/8 + 1
                        //console.log(objectString)
                        }
                    }
